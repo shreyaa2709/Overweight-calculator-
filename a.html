@@ -1,0 +1,451 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Overweight Calculator</title>
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background-color: #f0f2f5;
+      color: #333;
+      line-height: 1.6;
+      padding: 20px;
+    }
+
+    header {
+      background: linear-gradient(to right, #2563eb, #1e3a8a);
+      color: white;
+      padding: 20px;
+      text-align: center;
+      font-size: 2.2em;
+      font-weight: 700;
+      border-radius: 12px;
+      margin-bottom: 30px;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    }
+
+    .main-layout {
+      display: flex;
+      max-width: 1300px;
+      margin: 0 auto;
+      gap: 30px;
+    }
+
+    .main-content {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+    }
+
+    .calculator-container,
+    .recommended-products,
+    .info-section {
+      background-color: #ffffff;
+      border-radius: 12px;
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+      padding: 24px;
+    }
+
+    .calculator-container {
+      display: flex;
+      gap: 30px;
+      flex-wrap: wrap;
+      justify-content: space-between;
+    }
+
+    .calculator-flex {
+      flex: 1;
+      min-width: 280px;
+    }
+
+    .bmi-result-container {
+      flex: 0 0 200px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    
+
+
+
+    .bmi-circle {
+      width: 180px;
+      height: 180px;
+      border-radius: 50%;
+      background: #ffffff);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.6em;
+      font-weight: bold;
+      position: relative;
+      transition: background 1s ease-in-out;
+    }
+
+    .bmi-circle span {
+      position: absolute;
+    }
+
+    form label {
+      display: block;
+      margin-top: 15px;
+      font-size: 1.05em;
+      font-weight: 600;
+    }
+
+    form input,
+    form select {
+      width: 100%;
+      padding: 10px;
+      font-size: 1em;
+      border: 1px solid #d1d5db;
+      border-radius: 8px;
+      background-color: #f9fafb;
+      margin-top: 6px;
+    }
+
+    .range-value {
+      text-align: right;
+      font-size: 0.9em;
+      color: #555;
+      margin-top: 4px;
+    }
+
+    .btn-calculate {
+      width: 100%;
+      margin-top: 20px;
+      padding: 14px;
+      background-color: #2563eb;
+      color: white;
+      border: none;
+      border-radius: 8px;
+      font-weight: 600;
+      font-size: 1em;
+      cursor: pointer;
+      transition: background 0.3s;
+    }
+
+    .btn-calculate:hover {
+      background-color: #1d4ed8;
+    }
+
+    .result-box {
+      margin-top: 20px;
+      padding: 16px;
+      background-color: #f0fdf4;
+      border-left: 5px solid #22c55e;
+      border-radius: 8px;
+      font-size: 1.1em;
+    }
+
+    .recommended-products h3 {
+      margin-bottom: 20px;
+      color: #1e3a8a;
+    }
+
+    .product-list {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 20px;
+    }
+
+    .product-item {
+      background-color: #ffffff;
+      padding: 16px;
+      border-radius: 10px;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.05);
+      width: calc(33.333% - 20px);
+      text-align: center;
+      transition: transform 0.2s;
+    }
+
+    .product-item:hover {
+      transform: translateY(-5px);
+    }
+
+    .product-item img {
+      width: 100px;
+      height: 100px;
+      object-fit: cover;
+      border-radius: 6px;
+    }
+
+    .product-item a {
+      display: inline-block;
+      margin-top: 10px;
+      background-color: #2563eb;
+      color: white;
+      padding: 8px 12px;
+      border-radius: 6px;
+      text-decoration: none;
+      font-weight: 600;
+    }
+
+    .product-item a:hover {
+      background-color: #1d4ed8;
+    }
+
+    .info-section h2 {
+      margin-top: 20px;
+      color: #1e3a8a;
+    }
+
+    .info-section h3 {
+      margin-top: 15px;
+    }
+
+    .info-section ul {
+      padding-left: 20px;
+      list-style-type: disc;
+    }
+
+    .sidebar {
+      position: sticky;
+      top: 30px;
+      width: 300px;
+      height: fit-content;
+      background-color: #ffffff;
+      padding: 20px;
+      border-radius: 12px;
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+    }
+
+    .sidebar h3 {
+      text-align: center;
+      color: #1e3a8a;
+    }
+
+    .sidebar img {
+      width: 100%;
+      margin: 20px 0;
+      border-radius: 6px;
+    }
+
+    .sidebar ul {
+      list-style: none;
+      padding: 0;
+    }
+
+    .sidebar ul li {
+      font-size: 1.1em;
+      margin: 10px 0;
+      border-bottom: 1px solid #e5e7eb;
+      padding-bottom: 6px;
+    }
+
+    @media (max-width: 1024px) {
+      .main-layout {
+        flex-direction: column;
+      }
+
+      .sidebar {
+        width: 100%;
+        position: relative;
+      }
+
+      .product-item {
+        width: 100%;
+      }
+    }
+  </style>
+</head>
+<body>
+
+<header>Overweight Calculator</header>
+
+<div class="main-layout">
+  <div class="main-content">
+    <div class="calculator-container">
+      <div class="calculator-flex">
+        <form id="bmiForm">
+          <label for="age">Age</label>
+          <input type="range" id="age" min="0" max="100" value="0" oninput="document.getElementById('ageVal').textContent = this.value" />
+          <div class="range-value">Value: <span id="ageVal">0</span></div>
+
+          <label for="gender">Gender</label>
+          <select id="gender">
+            <option value="male">Male</option>
+            <option value="female">Female</option>
+          </select>
+
+          <label for="height">Height (cm)</label>
+          <input type="range" id="height" min="0" max="250" value="0" oninput="document.getElementById('heightVal').textContent = this.value" />
+          <div class="range-value">Value: <span id="heightVal">0</span></div>
+
+          <label for="weight">Weight (kg)</label>
+          <input type="range" id="weight" min="0" max="200" value="0" oninput="document.getElementById('weightVal').textContent = this.value" />
+          <div class="range-value">Value: <span id="weightVal">0</span></div>
+
+          <button type="button" class="btn-calculate" onclick="calculateBMI()">Calculate BMI</button>
+        </form>
+
+        <div id="result" class="result-box" style="display: none;"></div>
+      </div>
+
+      <div class="bmi-result-container">
+        <div id="bmiCircle" class="bmi-circle">
+          <span id="bmiValueText"></span>
+        </div>
+      </div>
+    </div>
+
+    <div class="recommended-products">
+      <h3>Recommended Products</h3>
+      <div class="product-list">
+        <div class="product-item">
+          <img src="https://newassets.apollo247.com/pub/media/catalog/product/e/m/ema0013_1.jpg" alt="Product 1">
+          <p>Nutrition Supplement</p>
+          <a href="#">View Product</a>
+        </div>
+        <div class="product-item">
+          <img src="https://cdn01.pharmeasy.in/dam/products_otc/U64428/herbal-hills-kesho-forte-ayurvedic-hair-oil-100-ml-hair-care-natural-hair-growth-pack-of-5-2-1665827756.jpg" alt="Product 2">
+          <p>Hair Care Oil</p>
+          <a href="#">View Product</a>
+        </div>
+        <div class="product-item">
+          <img src="https://images.price.tools/images/kesh-king-emami-scalp-hair-medicine-l-EwBH0tAP1.jpg" alt="Product 3">
+          <p>Scalp Tonic</p>
+          <a href="#">View Product</a>
+        </div>
+      </div>
+    </div>
+
+    <div class="info-section">
+      <h2>What is an Overweight Calculator?</h2>
+      <p>A Overweight calculator is a tool used to estimate a person's body fat based on their weight and height. It provides a numerical value that helps determine whether someone is underweight, at a healthy weight, overweight, or obese.</p>
+
+      <h2>How Does This Calculator Work?</h2>
+      <p>It uses BMI = weight (kg) / height² (m²) and classifies your health status using global standards. The result is displayed with a circular progress ring.</p>
+
+      <h2>Benefits of Using This Calculator</h2>
+      <ul>
+        <li>Instantly check your health category</li>
+        <li>Easy input and results</li>
+        <li>Standard medical guideline compliance</li>
+        <li>Works for all genders and ages</li>
+        <li>Helps with fitness goals</li>
+      </ul>
+
+      <h2>How to use Overweight Calculator?</h2>
+      <p><b>1. Input Your Information</b>
+         Some calculators may ask for your age to provide age-appropriate insights, but it’s not required for the BMI calculation itself.
+        
+        Gender can also be considered in some advanced calculators, especially for health advice, but BMI calculations do not vary directly based on gender.
+        
+        Enter your height in either centimeters (cm) or inches (in), depending on the unit preference of the calculator.
+        
+        Enter your weight in either kilograms (kg) or pounds (lbs), depending on the calculator’s unit system.</p>
+        
+      <p><b>2. Click the "Calculate" Button</b>
+        Once you’ve input your height and weight, click the “Calculate BMI” button. The calculator will then process your data and compute your BMI.
+      </p>
+      <b>3. View Your BMI Result</b>
+      After clicking "Calculate," your BMI result will be displayed, usually along with a classification of your weight status. The categories are typically:
+      
+      Underweight: BMI below 18.5
+      
+      Normal weight: BMI between 18.5 and 24.9
+      
+      Overweight: BMI between 25 and 29.9
+      
+      Obesity: BMI of 30 or higher (often broken down into different obesity classes)
+      <p><b>4. Interpret Your Result</b>
+        The calculator may provide health suggestions or lifestyle advice based on your result. For example:
+        
+        Underweight: You may be advised to gain weight in a healthy way.
+        
+        Normal weight: You are maintaining a healthy weight range.
+        
+        Overweight/Obesity: You might receive advice on weight management, including exercise, diet changes, or further consultation with a healthcare professional.</p>
+    </div>
+  </div>
+
+  <aside class="sidebar">
+    <h3>Best Sellers</h3>
+    <img src="https://assets.gadgets360cdn.com/pricee/assets/category/202006/og-banner-emami-1200x628_1591164994.jpg" alt="Best Seller Banner">
+    <h4>Popular Tools</h4>
+    <ul>
+      <li>Stress Calculator</li>
+      <li>Fat Calculator</li>
+      <li>Calorie Calculator</li>
+      <li>Protein Counter</li>
+      <li>Heart Risk Estimator</li>
+    </ul>
+  </aside>
+</div>
+
+<script>
+  function calculateBMI() {
+    const height = parseInt(document.getElementById('height').value);
+    const weight = parseInt(document.getElementById('weight').value);
+
+    if (!height || !weight) return;
+
+    const bmi = (weight / ((height / 100) ** 2)).toFixed(2);
+    let status = '', color = '';
+
+    if (bmi < 18.5) {
+      status = 'Underweight'; color = '#e11d48';
+    } else if (bmi < 24.9) {
+      status = 'Normal weight'; color = '#22c55e';
+    } else if (bmi < 29.9) {
+      status = 'Overweight'; color = '#f59e0b';
+    } else if (bmi < 34.9) {
+      status = 'Obesity I'; color = '#ef4444';
+    } else if (bmi < 39.9) {
+      status = 'Obesity II'; color = '#b91c1c';
+    } else {
+      status = 'Obesity III'; color = '#9b1c1c';
+    }
+
+    document.getElementById('result').textContent = `Your BMI is ${bmi} (${status})`;
+    document.getElementById('result').style.display = 'block';
+
+    const circle = document.getElementById('bmiCircle');
+    const percent = Math.min(bmi * 2, 100);
+    circle.style.background = `conic-gradient(${color} 0% ${percent}%, #e5e7eb ${percent}% 100%)`;
+    document.getElementById('bmiValueText').textContent = bmi;
+  }
+</script>
+
+</body>
+</html>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
